@@ -1,0 +1,12 @@
+#!/bin/bash
+
+timeout=$(xset q | grep timeout | cut -d ' ' -f 5) * 1000
+
+while true
+do
+    time=$(xprintidle)
+    if [ $time -gt $timeout ];
+    then
+        systemctl suspend
+    fi
+done

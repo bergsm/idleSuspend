@@ -3,11 +3,13 @@
 #timeout=$(xset q | grep timeout | cut -d ' ' -f 5) * 1000
 timeout=30000
 
+clock=$(date +%H%M)
+
 while true
 do
     time=$(xprintidle)
     echo $time
-    if [ $time -gt $timeout ];
+    if [[ $time -gt $timeout && ($clock -lt 0500 || $clock -gt 0600 ) ]];
     then
         systemctl suspend
     fi

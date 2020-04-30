@@ -3,15 +3,17 @@
 #timeout=$(xset q | grep timeout | cut -d ' ' -f 5) * 1000
 timeout=30000
 
-clock=$(date +%H%M)
 
 while true
 do
+    clock=$(date +%H%M)
     time=$(xprintidle)
     echo $time
-    if [[ $time -gt $timeout && ($clock -lt 0500 || $clock -gt 0600 ) ]];
+    #if [[ $time -gt $timeout && ($clock -lt 0500 || $clock -gt 0600 ) ]];
+    if [[ $time -gt $timeout && (${clock#0} -lt 0445 || ${clock#0} -gt 0615 ) ]];
     then
         systemctl suspend
+        sleep 10
     fi
-    sleep 60
+    sleep 1
 done

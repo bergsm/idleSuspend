@@ -1,19 +1,27 @@
 #!/bin/bash
 
-#timeout=$(xset q | grep timeout | cut -d ' ' -f 5) * 1000
-timeout=30000
+
+#in ms
+timeout=300000
 
 
 while true
 do
     clock=$(date +%H%M)
     time=$(xprintidle)
-    echo $time
-    #if [[ $time -gt $timeout && ($clock -lt 0500 || $clock -gt 0600 ) ]];
-    if [[ $time -gt $timeout && (${clock#0} -lt 0445 || ${clock#0} -gt 0615 ) ]];
+    #echo $time
+    if [[ $time -gt $timeout && ("$clock" < "04:45" || "$clock" > "06:15" ) ]];
+    #echo "Checking time.."
+    #if [[ $time -gt $timeout && ("$clock" < "14:15" || "$clock" > "15:30" ) ]];
     then
-        systemctl suspend
+        #echo $time is gt $timeout and $clock is lt 0915 or $clock is gt 0950
+        #echo "Suspend"
+        sudo systemctl suspend
         sleep 10
+    #else
+        #echo $time is lt $timeout or $clock is gt 0915 and $clock is lt 0950
+        #echo "stay awake"
     fi
-    sleep 1
+    #echo "sleeping.."
+    sleep 60
 done

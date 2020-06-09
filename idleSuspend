@@ -1,18 +1,26 @@
 #!/bin/bash
 
-
-#in ms
-timeout=300000
+lockMin=1
+suspendMin=20
+lockTimeout=$(( $lockMin * 60000 ))
+suspendTimeout=$(( $suspendMin * 60000 ))
 
 
 while true
 do
+    audio=$(pacmd list-sinks | grep -A 4 "*" | grep "state: " | cut -c 9-)
     clock=$(date +%H%M)
     time=$(xprintidle)
-    #echo $time
-    if [[ $time -gt $timeout && ("$clock" < "04:45" || "$clock" > "06:15" ) ]];
+    echo $time
+    echo $audio
+
+    if [[ $time -gt $lockTimeout && $audio != "RUNNING" ]];
+    then
+        multilockscreen -l
+        sleep 10
+    fi
+    if [[ $time -gt $suspendTimeout && ("$clock" < "04:45" || "$clock" > "06:15" ) ]];
     #echo "Checking time.."
-    #if [[ $time -gt $timeout && ("$clock" < "14:15" || "$clock" > "15:30" ) ]];
     then
         #echo $time is gt $timeout and $clock is lt 0915 or $clock is gt 0950
         #echo "Suspend"

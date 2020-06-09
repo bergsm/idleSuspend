@@ -1,0 +1,20 @@
+#!/bin/bash
+WINDOW=$(echo $(xwininfo -id $(xdotool getactivewindow) -stats | \
+                egrep '(Width|Height):' | \
+                awk '{print $NF}') | \
+                sed -e 's/ /x/')
+
+#Using xdpyinfo only gives us information about the screen which isn't particularly useful during multimonitor operations
+#SCREEN=$(xdpyinfo | grep -m1 dimensions | awk '{print $2}')
+
+#TODO calc if window is full screen using xrandr
+
+#Easy way: see if window matches either monitor full screen (rare bug if window on larger monitor matches monitor size of smaller monitor)
+
+#Hard way: Determine which monitor window is on and then determine if window matches that monitor's size
+
+if [ "$WINDOW" = "$SCREEN" ]; then
+    exit 0
+else
+    exit 1
+fi

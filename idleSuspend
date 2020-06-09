@@ -1,12 +1,9 @@
 #!/bin/bash
 
-#timeout=$(xset q | grep timeout | cut -d ' ' -f 5) * 1000
-#timeout=1200000
 lockMin=1
 suspendMin=20
 lockTimeout=$(( $lockMin * 60000 ))
 suspendTimeout=$(( $suspendMin * 60000 ))
-#timeout=300000
 
 
 while true

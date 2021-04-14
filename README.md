@@ -1,1 +1,1 @@
-README for idleSuspend
+A *very* basic suspend automation program for use on Linux platforms. This version requires multilockscreen, but that line can be easily commented out or substituted for your lock application of choice. Playing audio of any sort (movies, music, etc.) prevents suspension.

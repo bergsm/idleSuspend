@@ -1,10 +1,20 @@
 #!/bin/bash
 
-lockMin=1
+#timeout=$(xset q | grep timeout | cut -d ' ' -f 5) * 1000
+#timeout=1200000
+lockMin=10
+#lockMin=2
 suspendMin=20
+#suspendMin=4
 lockTimeout=$(( $lockMin * 60000 ))
 suspendTimeout=$(( $suspendMin * 60000 ))
+#timeout=300000
 
+for pid in $(pidof -x "idleSuspend"); do
+    if [ $pid != $$ ]; then
+        exit 1
+    fi
+done
 
 while true
 do
@@ -13,17 +23,28 @@ do
     time=$(xprintidle)
     echo $time
     echo $audio
+    pgrep -x "i3lock"
+    locked=$?
 
-    if [[ $time -gt $lockTimeout && $audio != "RUNNING" ]];
+
+    #TODO check for lid closure and external monitor connection?
+    if [[ $time -gt $lockTimeout && $audio != "RUNNING"  && $locked -eq 1 ]];
     then
-        multilockscreen -l
+        #multilockscreen -l &
         sleep 10
     fi
-    if [[ $time -gt $suspendTimeout && ("$clock" < "04:45" || "$clock" > "06:15" ) ]];
+    if [[ $time -gt $suspendTimeout && ("$clock" < "04:45" || "$clock" > "06:15" ) && $audio != "RUNNING" ]];
     #echo "Checking time.."
     then
         #echo $time is gt $timeout and $clock is lt 0915 or $clock is gt 0950
         #echo "Suspend"
+        pgrep -x "i3lock"
+        locked=$?
+        if [[ $locked -eq 1 ]];
+        then
+            multilockscreen -l &
+            sleep 1
+        fi
         sudo systemctl suspend
         sleep 10
     #else
